@@ -9,13 +9,14 @@ import A from './screens/1';
 import B from './screens/2';
 import C from './screens/3';
 import D from './screens/4';
+import QrOkundu from './screens/qrOkundu';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const AuthStack = () => (
   <Stack.Navigator initialRouteName='Login'>
-    <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+    <Stack.Screen name="Qr Okundu" component={QrOkundu} options={{ headerShown: false }} />
   </Stack.Navigator>
 );
 
@@ -71,8 +72,8 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
         <Stack.Screen name="AuthStack" component={AuthStack} options={{ headerShown: false }} />
+        <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
