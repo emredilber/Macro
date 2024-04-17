@@ -15,16 +15,18 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const AuthStack = () => (
-  <Stack.Navigator initialRouteName='Login'>
+  <Stack.Navigator >
     <Stack.Screen name="Qr Okundu" component={QrOkundu} options={{ headerShown: false }} />
   </Stack.Navigator>
 );
 
 const MainTabs = () => (
-  <Tab.Navigator screenOptions={{
-    headerShown: false, tabBarShowLabel: false,
-    tabBarStyle: { height: 80 }
-  }}>
+  <Tab.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarShowLabel: false,
+      tabBarStyle: { height: 80 }
+    }}>
     <Tab.Screen name="qrKodAlan" component={QrKodAlan}
       options={{
         tabBarIcon: ({ focused }) => (
@@ -44,7 +46,7 @@ const MainTabs = () => (
     <Tab.Screen name="B" component={B}
       options={{
         tabBarIcon: ({ focused }) => (
-          <View style={{ alignItems: 'center', justifyContent: 'center' ,marginLeft:5}}>
+          <View style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 5 }}>
             <Image source={require('./icons/macro.png')} resizeMode='contain' style={{ width: 40, height: 40, tintColor: focused ? '#F4690B' : null }} />
           </View>
         ),

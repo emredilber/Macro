@@ -1,4 +1,4 @@
-import { View, Text, Image, TextInput } from 'react-native'
+import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
 import React from 'react'
 
 
@@ -15,7 +15,7 @@ const Yiyecek = () => {
         <View style={{ flexDirection: 'row', borderWidth: 2, borderColor: '#C1D0DA', paddingHorizontal: 16, marginTop: 20, height: 48, width: 330, borderRadius: 10, alignItems: 'center', justifyContent: 'space-between' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Image source={require('../icons/search.png')} style={{ width: 25, height: 25 }} />
-            <TextInput placeholder='Arama' placeholderTextColor={'#C1D0DA'} style={{  marginLeft: 10 }} />
+            <TextInput placeholder='Arama' placeholderTextColor={'#C1D0DA'} style={{ marginLeft: 10 }} />
           </View>
           <Image source={require('../icons/scan.png')} style={{ width: 25, height: 25 }} />
         </View>
@@ -30,8 +30,6 @@ const Yiyecek = () => {
           <Text style={{ color: '#3D4C5E' }}>Tavuk Izgara Şöleni</Text>
           <Text style={{ color: '#546881', fontSize: 13, width: 250, marginTop: 5 }}>Tavuk But, Şiş, Pirzola, Baget, Baharatlı Patates Kızartması, Pilav, Biber, Acılı Ezme, Meşrubat ve Salata ile servis edilir.</Text></View>
       </View>
-
-
     </View>
   )
 }
