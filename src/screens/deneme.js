@@ -83,7 +83,7 @@ const Icecek = () => {
                                 })}
                             </View>
                         </ScrollView>
-
+                        {}
                         <View style={{ flexDirection: 'row', marginHorizontal: 15, gap: 17 }}>
                             {props.state.routes.map((route, index) => {
                                 const isFocused = props.state.index === index;

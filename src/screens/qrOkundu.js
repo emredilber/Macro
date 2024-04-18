@@ -3,6 +3,7 @@ import { Image, SafeAreaView, Text, View, TouchableOpacity, Dimensions, ScrollVi
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Icecek from './Icecek';
+import Deneme from './deneme';
 import Yiyecek from './Yiyecek';
 import App from './slide2';
 
@@ -48,7 +49,7 @@ const QrOkundu = () => {
                     </View>
                 )}
             >
-                <Tab.Screen name="İçecek" component={Icecek} />
+                <Tab.Screen name="İçecek" component={Deneme} />
                 <Tab.Screen name="Yiyecek" component={Yiyecek} />
             </Tab.Navigator>
 

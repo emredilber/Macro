@@ -32,7 +32,7 @@ const App = () => {
     };
 
     return (
-        <View>
+        <View >
             <Carousel
                 ref={carouselRef}
                 data={data}
@@ -42,13 +42,13 @@ const App = () => {
                 onSnapToItem={(index) => setActiveIndex(index)}
             />
             <Image source={require("../icons/logo.png")} style={{ position: 'absolute', width: 48, height: 48, marginLeft: 12, marginTop: 16 }} />
-            <TouchableOpacity style={{position:'absolute',backgroundColor:'#fff',paddingVertical:10,paddingHorizontal:20,borderRadius:12,alignSelf:'flex-end',right:15,top:20}}>
-                <Text style={{color:'#F4A218', fontSize:16,fontWeight:500}}>Garson Çağır</Text>
+            <TouchableOpacity style={{ position: 'absolute', backgroundColor: '#fff', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 12, alignSelf: 'flex-end', right: 15, top: 20 }}>
+                <Text style={{ color: '#F4A218', fontSize: 16, fontWeight: 500 }}>Garson Çağır</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ position: 'absolute', top: '50%', left: 20, height: 40, width: 40, backgroundColor: '#293644', opacity: 0.7, borderRadius: 20, justifyContent: 'center', alignItems: 'center' }} onPress={goBack}>
+            <TouchableOpacity style={{ position: 'absolute', top: 135, left: 20, height: 40, width: 40, backgroundColor: '#293644', opacity: 0.7, borderRadius: 20, justifyContent: 'center', alignItems: 'center' }} onPress={goBack}>
                 <Image source={require('../icons/left.png')} style={{ height: 18, width: 9 }} />
             </TouchableOpacity>
-            <TouchableOpacity style={{ position: 'absolute', top: '50%', right: 20, height: 40, width: 40, backgroundColor: '#293644', opacity: 0.7, borderRadius: 20, justifyContent: 'center', alignItems: 'center' }} onPress={goForward}>
+            <TouchableOpacity style={{ position: 'absolute', top: 135, right: 20, height: 40, width: 40, backgroundColor: '#293644', opacity: 0.7, borderRadius: 20, justifyContent: 'center', alignItems: 'center' }} onPress={goForward}>
                 <Image source={require('../icons/right.png')} style={{ height: 18, width: 9 }} />
             </TouchableOpacity>
             <Pagination
