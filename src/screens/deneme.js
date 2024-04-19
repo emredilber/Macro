@@ -1,38 +1,92 @@
-import React from 'react';
-import { Image, SafeAreaView, Text, View, TouchableOpacity, Dimensions, ScrollView, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, Button } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { Kahveler } from '../urunler/icecekler/kahve';
+import { Alkolsuzler } from '../urunler/icecekler/alkolsuz';
+import { Alkolluler } from '../urunler/icecekler/alkolu';
+import { Saraplar } from '../urunler/icecekler/sarap';
+import { Kokteyller } from '../urunler/icecekler/kokteyl';
 
 const Tab = createMaterialTopTabNavigator();
 
+const IcecekMenu = ({ urunler, onPressProduct }) => {
+    const [searchText, setSearchText] = useState('');
 
-const KahveMenu = () => {
+    const filteredProducts = urunler.filter(urun => {
+        return urun.name.toLowerCase().includes(searchText.toLowerCase());
+    });
+
     return (
-        <Text>kahve</Text>
+        <ScrollView>
+            <View style={{ padding: 20 }}>
+                <TextInput
+                    placeholder="Ürün ara"
+                    onChangeText={setSearchText}
+                    value={searchText}
+                    style={{ marginBottom: 20, borderWidth: 1, borderColor: '#ccc', padding: 10, borderRadius: 5 }}
+                />
+                {filteredProducts.map((urun, index) => (
+                    <TouchableOpacity key={index} onPress={() => onPressProduct(urun.name)}>
+                        <Text>{urun.name}</Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
+        </ScrollView>
     );
 };
-const AlkolsuzMenu = () => {
-    return (
-        <Text>Alkolsuz</Text>
-    );
-};
-const AlkolluMenu = () => {
-    return (
-        <Text>Alkollu</Text>
-    );
-};
-const SarapMenu = () => {
-    return (
-        <Text>Sarap</Text>
-    );
-};
-const KokteylMenu = () => {
-    return (
-        <Text>Kokteyl</Text>
-    );
-};
+const menuler = [
+    {
+        menu: 'Kahve',
+        iconSource: require("../icons/kahve.png"),
+        urunler: Kahveler
+    },
+    {
+        menu: 'Alkolsuz',
+        iconSource: require("../icons/alkolsuz.png"),
+        urunler: Alkolsuzler
+    },
+    {
+        menu: 'Alkollu',
+        iconSource: require("../icons/alkollu.png"),
+        urunler: Alkolluler
+    },
+    {
+        menu: 'Sarap',
+        iconSource: require("../icons/sarap.png"),
+        urunler: Saraplar
+    },
+    {
+        menu: 'Kokteyl',
+        iconSource: require("../icons/kokteyl.png"),
+        urunler: Kokteyller
+    }
+];
 
 
 const Icecek = () => {
+    const [selectedMenu, setSelectedMenu] = useState(menuler[0]);
+    const [filterOptions, setFilterOptions] = useState([]);
+
+    useEffect(() => {
+        // Filtre seçeneklerini oluştur
+        let options = [];
+        // Sadece seçili menünün ürünlerindeki kategori ve menşei bilgilerini al
+        selectedMenu.urunler.forEach(item => {
+            if (item.category && !options.includes(item.category)) {
+                options.push(item.category);
+            }
+            if (item.menşei && !options.includes(item.menşei)) {
+                options.push(item.menşei);
+            }
+        });
+        setFilterOptions(options);
+    }, [selectedMenu]);
+
+    const handleFilter = (filter) => {
+        // Filtreleme işlemleri burada yapılacak
+        console.log(`Filtre uygulandı: ${filter}`);
+    };
+
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
             <Tab.Navigator
@@ -40,7 +94,6 @@ const Icecek = () => {
                     tabBarShowLabel: false,
                     swipeEnabled: false,
                     tabBarStyle: { elevation: 0 },
-
                 }}
                 tabBar={(props) => (
                     <View style={{ backgroundColor: '#fff', marginTop: 20 }}>
@@ -49,32 +102,21 @@ const Icecek = () => {
                                 {props.state.routes.map((route, index) => {
                                     const isFocused = props.state.index === index;
 
-                                    let iconSource;
-                                    if (route.name === 'Kahve') {
-                                        iconSource = require("../icons/kahve.png");
-                                    } else if (route.name === 'Alkolsuz') {
-                                        iconSource = require("../icons/alkolsuz.png");
-                                    } else if (route.name === 'Alkollu') {
-                                        iconSource = require("../icons/alkollu.png");
-                                    } else if (route.name === 'Sarap') {
-                                        iconSource = require("../icons/sarap.png");
-                                    } else if (route.name === 'Kokteyl') {
-                                        iconSource = require("../icons/kokteyl.png");
-                                    }
-
+                                    const selectedMenu = menuler.find(menu => menu.menu === route.name);
                                     return (
                                         <TouchableOpacity
-                                            key={route.key}
+                                            key={index}
                                             style={{
                                                 alignItems: 'center',
                                                 borderRadius: 12,
                                             }}
                                             onPress={() => {
+                                                setSelectedMenu(selectedMenu);
                                                 props.navigation.navigate(route.name);
                                             }}
                                         >
-                                            <Image source={iconSource} style={{ width: 100, height: 100, borderRadius: 8 }} />
-                                            <Text style={{ color: isFocused ? '#546881' : '#9CA3AF' }}>{route.name}</Text>
+                                            <Image source={selectedMenu.iconSource} style={{ width: 100, height: 100, borderRadius: 8 }} />
+                                            <Text style={{ color: selectedMenu === selectedMenu ? '#546881' : '#9CA3AF' }}>{selectedMenu.menu}</Text>
                                             <View style={{ paddingBottom: 22 }}>
                                                 {isFocused && <View style={{ backgroundColor: '#F4A218', height: 3, width: 100, borderRadius: 2 }} />}
                                             </View>
@@ -83,57 +125,33 @@ const Icecek = () => {
                                 })}
                             </View>
                         </ScrollView>
-                        {}
+
                         <View style={{ flexDirection: 'row', marginHorizontal: 15, gap: 17 }}>
-                            {props.state.routes.map((route, index) => {
-                                const isFocused = props.state.index === index;
-
-                                return (
-                                    <TouchableOpacity
-                                        key={route.key}
-                                        style={{
-                                            alignItems: 'center',
-                                            borderRadius: 12,
-                                        }}
-                                        onPress={() => {
-                                            props.navigation.navigate(route.name);
-                                        }}
-                                    >
-                                        <Text style={{ color: isFocused ? '#546881' : '#9CA3AF' }}>{route.name}</Text>
-                                        <View style={{ paddingBottom: 22 }}>
-                                            {isFocused && <View style={{ backgroundColor: '#F4A218', height: 3, width: 100, borderRadius: 2 }} />}
-                                        </View>
-                                    </TouchableOpacity>
-                                );
-                            })}
-                        </View>
-
-                        {/*ARAMA ALANI*/}
-                        <View style={{ flexDirection: 'row', marginHorizontal: 10, justifyContent: 'space-between' }}>
-                            <View style={{ flexDirection: 'row', borderWidth: 2, borderColor: '#C1D0DA', paddingHorizontal: 16, height: 48, width: 330, borderRadius: 10, alignItems: 'center', justifyContent: 'space-between' }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <Image source={require('../icons/search.png')} style={{ width: 25, height: 25 }} />
-                                    <TextInput placeholder='Arama' placeholderTextColor={'#C1D0DA'} style={{ marginLeft: 10 }} />
-                                </View>
-                                <Image source={require('../icons/scan.png')} style={{ width: 25, height: 25 }} />
-                            </View>
-                            <View style={{ borderWidth: 2, borderColor: '#C1D0DA', height: 48, width: 48, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
-                                <Image source={require('../icons/setting.png')} style={{ width: 25, height: 25 }} />
-                            </View>
+                            {filterOptions.map((option, index) => (
+                                <TouchableOpacity
+                                    key={index}
+                                    style={{
+                                        alignItems: 'center',
+                                        borderRadius: 12,
+                                    }}
+                                    onPress={() => handleFilter(option)}
+                                >
+                                    <Text style={{ color: '#546881' }}>{option}</Text>
+                                </TouchableOpacity>
+                            ))}
                         </View>
 
                     </View>
                 )}
             >
-
-                <Tab.Screen name="Kahve" component={KahveMenu} />
-                <Tab.Screen name="Alkolsuz" component={AlkolsuzMenu} />
-                <Tab.Screen name="Alkollu" component={AlkolluMenu} />
-                <Tab.Screen name="Sarap" component={SarapMenu} />
-                <Tab.Screen name="Kokteyl" component={KokteylMenu} />
+                {menuler.map((menu, index) => (
+                    <Tab.Screen name={menu.menu} key={index}>
+                        {() => <IcecekMenu urunler={menu.urunler} onPressProduct={(product) => console.log(product)} />}
+                    </Tab.Screen>
+                ))}
             </Tab.Navigator>
         </View>
-    )
+    );
 }
 
-export default Icecek
+export default Icecek;
