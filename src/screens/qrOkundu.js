@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Image, SafeAreaView, Text, View, TouchableOpacity, } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Image, SafeAreaView, Text, View, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform, Keyboard } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Icecek from './Icecek';
 import Yiyecek from './Yiyecek';
@@ -9,16 +9,28 @@ const Tab = createMaterialTopTabNavigator();
 
 const QrOkundu = () => {
     const [open, setOpen] = useState(false);
+    const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (event) => {
+            setKeyboardHeight(event.endCoordinates.height);
+        });
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+            setKeyboardHeight(0);
+        });
+
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
 
     const toggleMenu = () => {
         setOpen(!open);
     };
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-            <App style={{bottom:20}} />
-
-
-
             <Tab.Navigator
                 screenOptions={{
                     tabBarShowLabel: false,
@@ -26,30 +38,33 @@ const QrOkundu = () => {
                     tabBarStyle: { elevation: 0 },
                 }}
                 tabBar={(props) => (
-                    <View style={{ backgroundColor: '#F5F5F5', marginTop: 20 }}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 65 }}>
-                            {props.state.routes.map((route, index) => {
-                                const isFocused = props.state.index === index;
-                                return (
-                                    <TouchableOpacity
-                                        key={route.key}
-                                        style={{
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            padding: 10,
-                                            paddingHorizontal: 40,
-                                            borderRadius: 12,
-                                            backgroundColor: isFocused ? '#F4A218' : null,
-                                            marginVertical: 12
-                                        }}
-                                        onPress={() => {
-                                            props.navigation.navigate(route.name);
-                                        }}
-                                    >
-                                        <Text style={{ color: isFocused ? 'white' : '#546881' }}>{route.name}</Text>
-                                    </TouchableOpacity>
-                                );
-                            })}
+                    <View style={{marginTop:-keyboardHeight}}>
+                        <App />
+                        <View style={{ backgroundColor: '#F5F5F5', marginTop: 20 }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 65 }}>
+                                {props.state.routes.map((route, index) => {
+                                    const isFocused = props.state.index === index;
+                                    return (
+                                        <TouchableOpacity
+                                            key={route.key}
+                                            style={{
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                padding: 10,
+                                                paddingHorizontal: 40,
+                                                borderRadius: 12,
+                                                backgroundColor: isFocused ? '#F4A218' : null,
+                                                marginVertical: 12
+                                            }}
+                                            onPress={() => {
+                                                props.navigation.navigate(route.name);
+                                            }}
+                                        >
+                                            <Text style={{ color: isFocused ? 'white' : '#546881' }}>{route.name}</Text>
+                                        </TouchableOpacity>
+                                    );
+                                })}
+                            </View>
                         </View>
                     </View>
                 )}
@@ -79,7 +94,7 @@ const QrOkundu = () => {
                 )}
             </View>
         </SafeAreaView>
-
     );
 };
+
 export default QrOkundu;
