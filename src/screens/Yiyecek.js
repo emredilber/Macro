@@ -26,8 +26,8 @@ const YemekMenu = ({ urunler, onPressProduct, searchText }) => {
               
               {filteredProducts.map((urun, index) => ( 
                   <TouchableOpacity key={index} onPress={() => onPressProduct(urun.name)}>
-                      <View style={{ marginHorizontal: 24, flexDirection: 'column', rowGap: 32, marginBottom: 32 }}>
-                          <View style={{ padding: 12, elevation: 6, backgroundColor: '#fff' }}>
+                      <View style={{ marginHorizontal: 24, flexDirection: 'column', rowGap: 32, marginBottom: 16 }}>
+                          <View style={{ padding: 12, backgroundColor: '#fff' ,borderBottomColor:'#DCE4ED',borderBottomWidth:1}}>
                               <View style={{ borderBottomColor: '#C1D0DA', flexDirection: 'row' }}>
                                   <Image source={urun.picture} style={{ width: 70, height: 70, borderRadius: 8 }} />
                                   <View style={{ flexDirection: 'colums', marginLeft: 12 }}>
