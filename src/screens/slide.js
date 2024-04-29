@@ -1,106 +1,68 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet ,Dimensions} from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, Text, Dimensions, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 
-const Carousel = ({ data }) => {
-  const scrollViewRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+const data = [
+    { image: require('../icons/1.png') },
+    { image: require('../icons/1.png') },
+    { image: require('../icons/1.png') },
+];
 
-  const handlePrevious = () => {
-    if (activeIndex > 0) {
-      scrollViewRef.current.scrollTo({ x: (activeIndex - 1) * screenWidth, animated: true });
-      setActiveIndex(activeIndex - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (activeIndex < data.length - 1) {
-      scrollViewRef.current.scrollTo({ x: (activeIndex + 1) * screenWidth, animated: true });
-      setActiveIndex(activeIndex + 1);
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      <ScrollView
-        ref={scrollViewRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onScroll={(event) => {
-          const contentOffsetX = event.nativeEvent.contentOffset.x;
-          const newIndex = Math.floor(contentOffsetX / screenWidth);
-          setActiveIndex(newIndex);
-        }}
-      >
-        {data.map((item, index) => (
-          <View key={index} style={styles.card}>
-            <Text>{item.title}</Text>
-          </View>
-        ))}
-      </ScrollView>
-      
-      {/* Göstergeler */}
-      <View style={styles.indicatorsContainer}>
-        {data.map((_, index) => (
-          <View key={index} style={[styles.indicator, index === activeIndex && styles.activeIndicator]} />
-        ))}
-      </View>
-
-      {/* Sol ve sağ butonlar */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handlePrevious} style={styles.button}>
-          <Text style={styles.buttonText}>{'<'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleNext} style={styles.button}>
-          <Text style={styles.buttonText}>{'>'}</Text>
-        </TouchableOpacity>
-      </View>
+const renderItem = ({ item }) => (
+    <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+        <Image source={item.image} style={{ width: '100%', height: 315, resizeMode: 'contain' }} />
     </View>
-  );
+);
+
+const App = () => {
+    const screenWidth = Dimensions.get('window').width;
+    const [activeIndex, setActiveIndex] = useState(0);
+    const carouselRef = useRef(null);
+
+    const goForward = () => {
+        if (carouselRef.current) {
+            carouselRef.current.snapToNext();
+        }
+    };
+
+    const goBack = () => {
+        if (carouselRef.current) {
+            carouselRef.current.snapToPrev();
+        }
+    };
+
+    return (
+        <View >
+            <Carousel
+                ref={carouselRef}
+                data={data}
+                renderItem={renderItem}
+                sliderWidth={screenWidth}
+                itemWidth={screenWidth}
+                onSnapToItem={(index) => setActiveIndex(index)}
+            />
+            <Image source={require("../icons/logo.png")} style={{ position: 'absolute', width: 48, height: 48, marginLeft: 12, marginTop: 16 }} />
+            <TouchableOpacity style={{ position: 'absolute', backgroundColor: '#fff', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 12, alignSelf: 'flex-end', right: 15, top: 20 }}>
+                <Text style={{ color: '#F4A218', fontSize: 16, fontWeight: 500 }}>Garson Çağır</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ position: 'absolute', top: 135, left: 20, height: 40, width: 40, backgroundColor: '#293644', opacity: 0.7, borderRadius: 20, justifyContent: 'center', alignItems: 'center' }} onPress={goBack}>
+                <Image source={require('../icons/left.png')} style={{ height: 18, width: 9 }} />
+            </TouchableOpacity>
+            <TouchableOpacity style={{ position: 'absolute', top: 135, right: 20, height: 40, width: 40, backgroundColor: '#293644', opacity: 0.7, borderRadius: 20, justifyContent: 'center', alignItems: 'center' }} onPress={goForward}>
+                <Image source={require('../icons/right.png')} style={{ height: 18, width: 9 }} />
+            </TouchableOpacity>
+            <Pagination
+                dotsLength={data.length}
+                activeDotIndex={activeIndex}
+                containerStyle={{ position: 'absolute', bottom: 0, alignSelf: 'center' }}
+                dotStyle={{ width: 18, height: 4.5, borderRadius: 2, backgroundColor: 'white' }}
+                inactiveDotOpacity={0.4}
+                inactiveDotScale={1}
+                dotContainerStyle={{ marginHorizontal: 5 }}
+                inactiveDotStyle={{ width: 18, height: 4.5, borderRadius: 2, backgroundColor: 'white' }}
+            />
+        </View>
+    );
 };
 
-const screenWidth = Dimensions.get('window').width;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  card: {
-    width: screenWidth,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'lightblue',
-  },
-  indicatorsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  indicator: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: 'gray',
-    marginHorizontal: 5,
-  },
-  activeIndicator: {
-    backgroundColor: 'blue',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
-  button: {
-    backgroundColor: 'lightgray',
-    padding: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});
-
-export default Carousel;
+export default App;

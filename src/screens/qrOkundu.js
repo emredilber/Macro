@@ -1,18 +1,23 @@
-import React from 'react';
-import { Image, SafeAreaView, Text, View, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { Image, SafeAreaView, Text, View, TouchableOpacity, } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Icecek from './Icecek';
-import Deneme from './deneme';
 import Yiyecek from './Yiyecek';
-import App from './slide2';
+import App from './slide';
 
 const Tab = createMaterialTopTabNavigator();
 
 const QrOkundu = () => {
+    const [open, setOpen] = useState(false);
+
+    const toggleMenu = () => {
+        setOpen(!open);
+    };
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-            <App />
+            <App style={{bottom:20}} />
+
+
 
             <Tab.Navigator
                 screenOptions={{
@@ -34,7 +39,7 @@ const QrOkundu = () => {
                                             padding: 10,
                                             paddingHorizontal: 40,
                                             borderRadius: 12,
-                                            backgroundColor: isFocused ? '#F4A218' : '#FFF',
+                                            backgroundColor: isFocused ? '#F4A218' : null,
                                             marginVertical: 12
                                         }}
                                         onPress={() => {
@@ -49,10 +54,30 @@ const QrOkundu = () => {
                     </View>
                 )}
             >
-                <Tab.Screen name="İçecek" component={Deneme} />
+                <Tab.Screen name="İçecek" component={Icecek} />
                 <Tab.Screen name="Yiyecek" component={Yiyecek} />
             </Tab.Navigator>
 
+            <View style={{ position: 'absolute', bottom: 16, right: 16 }}>
+                <TouchableOpacity onPress={toggleMenu} style={{ width: 70, height: 70, borderRadius: 35, backgroundColor: '#f4690b', alignItems: 'center', justifyContent: 'center' }}>
+                    <Image source={open ? require('../icons/sepet.png') : require('../icons/zil.png')} style={{ height: 36, resizeMode: 'contain' }} />
+                </TouchableOpacity>
+                {open && (
+                    <View style={{ position: 'absolute', bottom: 70, right: 8 }}>
+                        <TouchableOpacity onPress={toggleMenu} style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: '#f4a218', alignItems: 'center', justifyContent: 'center', zIndex: 999, marginBottom: 10 }}>
+                            <Image source={require('../icons/zil.png')} style={{ height: 30, resizeMode: 'contain' }} />
+
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: '#f4a218', alignItems: 'center', justifyContent: 'center', zIndex: 999, marginBottom: 10 }}>
+                            <Image source={require('../icons/payment.png')} style={{ height: 30, resizeMode: 'contain' }} />
+
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: '#f4a218', alignItems: 'center', justifyContent: 'center', zIndex: 999, marginBottom: 10 }}>
+                            <Image source={require('../icons/liste.png')} style={{ height: 30, resizeMode: 'contain' }} />
+                        </TouchableOpacity>
+                    </View>
+                )}
+            </View>
         </SafeAreaView>
 
     );

@@ -1,79 +1,116 @@
 import { View, Text, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { AnaYemekler } from '../urunler/yiyecekler/anayemek';
+import { Corbalar } from '../urunler/yiyecekler/corba';
+import { Aperatifler } from '../urunler/yiyecekler/aperatif';
+import { Tatlilar } from '../urunler/yiyecekler/tatli';
+import { Pizallar } from '../urunler/yiyecekler/pizza';
+import { Noodleler } from '../urunler/yiyecekler/noddle';
+import { Makarnalar } from '../urunler/yiyecekler/makarna';
+import { Salatalar } from '../urunler/yiyecekler/salata';
 
 const Tab = createMaterialTopTabNavigator();
 
 
-const AnaYemek = () => {
-  return (
-    <View style={{ flexDirection: 'row', marginHorizontal: 10, justifyContent: 'space-between' }}>
-      <View style={{ flexDirection: 'row', borderWidth: 2, borderColor: '#C1D0DA', paddingHorizontal: 16, marginTop: 20, height: 48, width: 330, borderRadius: 10, alignItems: 'center', justifyContent: 'space-between' }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Image source={require('../icons/search.png')} style={{ width: 25, height: 25 }} />
-          <TextInput placeholder='Arama' placeholderTextColor={'#C1D0DA'} style={{ marginLeft: 10 }} />
-        </View>
-        <Image source={require('../icons/scan.png')} style={{ width: 25, height: 25 }} />
-      </View>
-      <View style={{ borderWidth: 2, borderColor: '#C1D0DA', height: 50, borderRadius: 10, marginTop: 20, width: 50, alignItems: 'center', justifyContent: 'center' }}>
-        <Image source={require('../icons/setting.png')} style={{ width: 25, height: 25 }} />
-      </View>
-    </View>
+const YemekMenu = ({ urunler, onPressProduct, searchText }) => {
+  const filteredProducts = urunler.filter(urun => {
+      return urun.name.toLowerCase().includes(searchText.toLowerCase()) 
+  });
 
+  return (
+      <ScrollView style={{ backgroundColor: '#fff' }}>
+          <View style={{ marginTop: 20 }}>
+            
+            {/*YEMEKLER LİSTELENİYOR*/}
+              
+              {filteredProducts.map((urun, index) => ( 
+                  <TouchableOpacity key={index} onPress={() => onPressProduct(urun.name)}>
+                      <View style={{ marginHorizontal: 24, flexDirection: 'column', rowGap: 32, marginBottom: 32 }}>
+                          <View style={{ padding: 12, elevation: 6, backgroundColor: '#fff' }}>
+                              <View style={{ borderBottomColor: '#C1D0DA', flexDirection: 'row' }}>
+                                  <Image source={urun.picture} style={{ width: 70, height: 70, borderRadius: 8 }} />
+                                  <View style={{ flexDirection: 'colums', marginLeft: 12 }}>
+                                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                          <Text style={{ color: '#3D4C5E' }}>{urun.name}</Text>
+                                          <Text style={{ color: '#f4690b', fontWeight: 500 }}>₺ {urun.price}</Text>
+                                      </View>
+                                      <Text style={{ color: '#546881', fontSize: 13, width: 250, marginTop: 5 }}>{urun.description}</Text></View>
+                              </View>
+                              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 11 }}>
+                                  <View style={{ flexDirection: 'row' }}>
+                                      <Image source={require('../icons/kcal.png')} style={{ height: 16, tintColor: '#ff0000', resizeMode: 'contain' }} />
+                                      <Text style={{ fontSize: 12, color: '#FF0000', fontWeight: 500, marginLeft: 2 }}>Kcal: {urun.nutrition.kcal}</Text>
+                                  </View>
+                                  <View style={{ flexDirection: 'row' }}>
+                                      <Image source={require('../icons/protein.png')} style={{ height: 16, tintColor: '#f4690b', resizeMode: 'contain' }} />
+                                      <Text style={{ fontSize: 12, color: '#f4690b', fontWeight: 500, marginLeft: 2 }}>Protein: {urun.nutrition.protein}</Text>
+                                  </View>
+                                  <View style={{ flexDirection: 'row' }}>
+                                      <Image source={require('../icons/oil.png')} style={{ height: 16, tintColor: '#019de7', resizeMode: 'contain' }} />
+                                      <Text style={{ fontSize: 12, color: '#019de7', fontWeight: 500, marginLeft: 2 }}>Yağ: {urun.nutrition.fat}</Text>
+                                  </View>
+                                  <View style={{ flexDirection: 'row' }}>
+                                      <Image source={require('../icons/karb.png')} style={{ height: 16, tintColor: '#3dbd41', resizeMode: 'contain' }} />
+                                      <Text style={{ fontSize: 12, color: '#3dbd41', fontWeight: 500, marginLeft: 2 }}>Karb: {urun.nutrition.carb}</Text>
+                                  </View>
+                              </View>
+                          </View>
+                      </View>
+                  </TouchableOpacity>
+              ))}
+          </View>
+      </ScrollView>
   );
 };
-const Corba = () => {
-  return (
-    <View>
 
-      <View style={{ borderBottomWidth: 1, borderBottomColor: '#C1D0DA', marginHorizontal: 10, marginTop: 20, padding: 10, flexDirection: 'row' }}>
-        <Image source={require('../icons/tavuk.png')} style={{ marginHorizontal: 10, width: 70, height: 70, borderRadius: 8 }} />
-        <View style={{ flexDirection: 'colums' }}>
-          <Text style={{ color: '#3D4C5E' }}>Tavuk Izgara Şöleni</Text>
-          <Text style={{ color: '#546881', fontSize: 13, width: 250, marginTop: 5 }}>Tavuk But, Şiş, Pirzola, Baget, Baharatlı Patates Kızartması, Pilav, Biber, Acılı Ezme, Meşrubat ve Salata ile servis edilir.</Text></View>
-      </View>
-
-    </View>
-  );
-};
-const Aperatif = () => {
-  return (
-    <Text>Aperatif</Text>
-  );
-};
-const Tatli = () => {
-  return (
-    <Text>Tatli</Text>
-  );
-};
-const Pizza = () => {
-  return (
-    <Text>Pizza</Text>
-  );
-};
-const Noodle = () => {
-  return (
-    <Text>Noodle</Text>
-  );
-};
-const Makarna = () => {
-  return (
-    <Text>Makarna</Text>
-  );
-};
-const Salata = () => {
-  return (
-    <Text>salata</Text>
-  );
-};
-const Aperatif2 = () => {
-  return (
-    <Text>Aperatif2</Text>
-  );
-};
+const menuler = [
+  {
+    menu: 'Ana Yemek',
+    iconSource: require("../icons/ana-yemek.png"),
+    urunler: AnaYemekler
+  },
+  {
+    menu: 'Corba',
+    iconSource: require("../icons/corba.png"),
+    urunler: Corbalar
+  },
+  {
+    menu: 'Aperatif',
+    iconSource: require("../icons/aperatif.png"),
+    urunler: Aperatifler
+  },
+  {
+    menu: 'Tatli',
+    iconSource: require("../icons/tatli.png"),
+    urunler: Tatlilar
+  },
+  {
+    menu: 'Pizza',
+    iconSource: require("../icons/pizza.png"),
+    urunler: Pizallar
+  },
+  {
+    menu: 'Noddle',
+    iconSource: require("../icons/noddle.png"),
+    urunler: Noodleler
+  },
+  {
+    menu: 'Makarna',
+    iconSource: require("../icons/makarna.png"),
+    urunler: Makarnalar
+  },
+  {
+    menu: 'Salata',
+    iconSource: require("../icons/salata.png"),
+    urunler: Salatalar
+  }
+];
 
 
 const Yiyecek = () => {
+  const [searchText, setSearchText] = useState('');
+
   return (
     <View style={{ flex: 1 }}>
       <Tab.Navigator
@@ -90,30 +127,10 @@ const Yiyecek = () => {
                 {props.state.routes.map((route, index) => {
                   const isFocused = props.state.index === index;
 
-                  let iconSource;
-                  if (route.name === 'AnaYemek') {
-                    iconSource = require("../icons/ana-yemek.png");
-                  } else if (route.name === 'Corba') {
-                    iconSource = require("../icons/corba.png");
-                  } else if (route.name === 'Aperatif') {
-                    iconSource = require("../icons/aperatif.png");
-                  } else if (route.name === 'Tatli') {
-                    iconSource = require("../icons/tatli.png");
-                  } else if (route.name === 'Pizza') {
-                    iconSource = require("../icons/pizza.png");
-                  } else if (route.name === 'Noodle') {
-                    iconSource = require("../icons/noodle.png");
-                  } else if (route.name === 'Makarna') {
-                    iconSource = require("../icons/makarna.png");
-                  } else if (route.name === 'Salata') {
-                    iconSource = require("../icons/salata.png");
-                  } else if (route.name === 'Aperatif2') {
-                    iconSource = require("../icons/aperatif2.png");
-                  }
-
+                  const selectedMenu = menuler.find(menu => menu.menu === route.name);
                   return (
                     <TouchableOpacity
-                      key={route.key}
+                      key={index}
                       style={{
                         alignItems: 'center',
                         borderRadius: 12,
@@ -122,44 +139,45 @@ const Yiyecek = () => {
                         props.navigation.navigate(route.name);
                       }}
                     >
-                      <Image source={iconSource} style={{ width: 100, height: 100, borderRadius: 8 }} />
-                      <Text style={{ color: isFocused ? '#546881' : '#9CA3AF' }}>{route.name}</Text>
-                      <View style={{ paddingBottom: 22 }}>
+                      <Image source={selectedMenu.iconSource} style={{ width: 100, height: 100, borderRadius: 8 }} />
+                      <Text style={{ color: isFocused ? '#546881' : '#9CA3AF', fontWeight: isFocused ? 600:400}}>{selectedMenu.menu}</Text>
+                      <View >
                         {isFocused && <View style={{ backgroundColor: '#F4A218', height: 3, width: 100, borderRadius: 2 }} />}
                       </View>
                     </TouchableOpacity>
-
                   );
                 })}
               </View>
             </ScrollView>
 
             {/*ARAMA ALANI*/}
-            <View style={{ flexDirection: 'row', marginHorizontal: 10, justifyContent: 'space-between' }}>
-              <View style={{ flexDirection: 'row', borderWidth: 2, borderColor: '#C1D0DA', paddingHorizontal: 16, marginTop: 20, height: 48, width: 330, borderRadius: 10, alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ marginTop: 15, flexDirection: 'row', marginHorizontal: 10, justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row', borderWidth: 2, borderColor: '#C1D0DA', paddingHorizontal: 16, height: 48, width: 330, borderRadius: 10, alignItems: 'center', justifyContent: 'space-between' }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Image source={require('../icons/search.png')} style={{ width: 25, height: 25 }} />
-                  <TextInput placeholder='Arama' placeholderTextColor={'#C1D0DA'} style={{ marginLeft: 10 }} />
+                  <TextInput placeholder='Arama' onChangeText={setSearchText} value={searchText} placeholderTextColor={'#C1D0DA'} style={{ flex: 1, marginLeft: 10 }} />
+                  <TouchableOpacity>
+                    <Image source={require('../icons/scan.png')} style={{ width: 25, height: 25 }} />
+                  </TouchableOpacity>
                 </View>
-                <Image source={require('../icons/scan.png')} style={{ width: 25, height: 25 }} />
               </View>
-              <View style={{ borderWidth: 2, borderColor: '#C1D0DA', height: 50, borderRadius: 10, marginTop: 20, width: 50, alignItems: 'center', justifyContent: 'center' }}>
+              <TouchableOpacity style={{ borderWidth: 2, borderColor: '#C1D0DA', height: 48, width: 48, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
                 <Image source={require('../icons/setting.png')} style={{ width: 25, height: 25 }} />
-              </View>
+              </TouchableOpacity>
             </View>
 
           </View>
         )}
       >
-        <Tab.Screen name="AnaYemek" component={AnaYemek} />
-        <Tab.Screen name="Corba" component={Corba} />
-        <Tab.Screen name="Aperatif" component={Aperatif} />
-        <Tab.Screen name="Tatli" component={Tatli} />
-        <Tab.Screen name="Pizza" component={Pizza} />
-        <Tab.Screen name="Noodle" component={Noodle} />
-        <Tab.Screen name="Makarna" component={Makarna} />
-        <Tab.Screen name="Salata" component={Salata} />
-        <Tab.Screen name="Aperatif2" component={Aperatif2} />
+        {menuler.map((menu, index) => (
+          <Tab.Screen name={menu.menu} key={index}>
+            {() => <YemekMenu
+              urunler={menu.urunler}
+              onPressProduct={(product) => console.log(product)}
+              searchText={searchText}
+            />}
+          </Tab.Screen>
+        ))}
       </Tab.Navigator>
     </View>
   )
